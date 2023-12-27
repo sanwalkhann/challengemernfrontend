@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +25,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3500/auth/login", {
+      const response = await fetch("https://weekchallengemernbackend.vercel.app/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,9 +53,6 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:3000/auth/google/callback";
-  };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -120,13 +117,7 @@ const Login = () => {
           </button>
         </div>
 
-        {/* Signup with Google button */}
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full mt-4 bg-red-500 text-white rounded-md py-2 transition duration-300 hover:bg-red-600"
-        >
-          Signup with Google
-        </button>
+      
       </div>
     </div>
   );

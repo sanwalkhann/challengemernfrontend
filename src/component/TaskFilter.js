@@ -4,7 +4,7 @@ const TaskFilter = ({ onFilter, onPriorityFilter, onClearFilter, activeFilter })
   return (
     <div className="mb-6">
       <h3 className="text-xl font-semibold text-gray-800 mb-2">Filter Tasks</h3>
-      <div className="flex space-x-4">
+      <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
         <button
           onClick={() => onPriorityFilter('high')}
           className={`${

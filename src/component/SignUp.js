@@ -22,7 +22,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3500/auth/signup", {
+      const response = await fetch("https://weekchallengemernbackend.vercel.app/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

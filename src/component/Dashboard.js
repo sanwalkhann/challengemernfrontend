@@ -1,17 +1,17 @@
 // Dashboard.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { FaEdit, FaTrash, FaSave, FaTimes } from 'react-icons/fa';
-import TaskFilter from './TaskFilter';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { FaEdit, FaTrash, FaSave, FaTimes } from "react-icons/fa";
+import TaskFilter from "./TaskFilter";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
-  const [taskTitle, setTaskTitle] = useState('');
-  const [taskDescription, setTaskDescription] = useState('');
-  const [taskPriority, setTaskPriority] = useState('');
+  const [taskTitle, setTaskTitle] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [taskPriority, setTaskPriority] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editTaskId, setEditTaskId] = useState(null);
   const navigate = useNavigate();
@@ -32,8 +32,8 @@ const Dashboard = () => {
 
   const fetchTasks = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3500/tasks', {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("https://weekchallengemernbackend.vercel.app/tasks", {
         withCredentials: true,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ const Dashboard = () => {
 
       setTasks(response.data);
     } catch (error) {
-      setError('Error fetching tasks. Please try again.');
+      setError("Error fetching tasks. Please try again.");
       console.error(error.message);
     }
   };
@@ -52,11 +52,11 @@ const Dashboard = () => {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       if (editMode && editTaskId) {
         const response = await axios.put(
-          `http://localhost:3500/tasks/${editTaskId}`,
+          `https://weekchallengemernbackend.vercel.app/tasks/${editTaskId}`,
           {
             title: taskTitle,
             description: taskDescription,
@@ -71,19 +71,19 @@ const Dashboard = () => {
 
         if (response.status === 200) {
           await fetchTasks();
-          setTaskTitle('');
-          setTaskDescription('');
-          setTaskPriority('');
+          setTaskTitle("");
+          setTaskDescription("");
+          setTaskPriority("");
           setEditMode(false);
           setEditTaskId(null);
-          setError('');
+          setError("");
         } else {
-          setError('Error updating task. Please try again.');
-          console.error('Error updating task:', response.statusText);
+          setError("Error updating task. Please try again.");
+          console.error("Error updating task:", response.statusText);
         }
       } else {
         const response = await axios.post(
-          'http://localhost:3500/tasks',
+          "https://weekchallengemernbackend.vercel.app/tasks",
           {
             title: taskTitle,
             description: taskDescription,
@@ -98,20 +98,20 @@ const Dashboard = () => {
 
         if (response.status === 201) {
           await fetchTasks();
-          setTaskTitle('');
-          setTaskDescription('');
-          setTaskPriority('');
-          setError('');
+          setTaskTitle("");
+          setTaskDescription("");
+          setTaskPriority("");
+          setError("");
         } else {
-          setError('Error creating task. Please try again.');
-          console.error('Error creating task:', response.statusText);
+          setError("Error creating task. Please try again.");
+          console.error("Error creating task:", response.statusText);
         }
       }
     } catch (error) {
       setError(
         editMode
-          ? 'Error updating task. Please try again.'
-          : 'Error creating task. Please try again.'
+          ? "Error updating task. Please try again."
+          : "Error creating task. Please try again."
       );
       console.error(error.message);
     } finally {
@@ -121,73 +121,79 @@ const Dashboard = () => {
 
   const handleEditTask = (taskId) => {
     const taskToEdit = tasks.find((task) => task._id === taskId);
-  
+
     if (taskToEdit) {
-      setTaskTitle(taskToEdit.title || '');
-      setTaskDescription(taskToEdit.description || '');
-  
-      // Ensure that the priority is one of the valid options
-      const validPriority = ['high', 'medium', 'low'].includes(taskToEdit.priority)
+      setTaskTitle(taskToEdit.title || "");
+      setTaskDescription(taskToEdit.description || "");
+
+      const validPriority = ["high", "medium", "low"].includes(
+        taskToEdit.priority
+      )
         ? taskToEdit.priority
-        : '';
-  
+        : "";
+
       setTaskPriority(validPriority);
       setEditMode(true);
       setEditTaskId(taskId);
     }
   };
-  
-  
+
   const handleCancelEdit = () => {
-    setTaskTitle('');
-    setTaskDescription('');
-    setTaskPriority('');
+    setTaskTitle("");
+    setTaskDescription("");
+    setTaskPriority("");
     setEditMode(false);
     setEditTaskId(null);
-    setError('');
+    setError("");
   };
 
   const handleDeleteTask = async (taskId) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.delete(`http://localhost:3500/tasks/${taskId}`, {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`https://weekchallengemernbackend.vercel.app/tasks/${taskId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      if (response.ok) {
+  
+      console.log(response);
+  
+      if (response.status === 200) {
         await fetchTasks();
       } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Error deleting task. Please try again.');
-        console.error('Error deleting task:', response.statusText);
+        console.error("Error deleting task:", response);
+        if (response.headers["content-type"]?.includes("application/json")) {
+          const errorData = response.data;
+          setError(errorData.message || "Error deleting task. Please try again.");
+        } else {
+          setError("Error deleting task. Please try again.");
+        }
       }
     } catch (error) {
-      setError('Error deleting task. Please try again.');
+      setError("Error deleting task. Please try again.");
       console.error(error.message);
     }
   };
-
+  
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/');
+    navigate("/");
   };
 
   useEffect(() => {
     const checkAuthentication = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
 
         if (token) {
           await fetchTasks();
         } else {
-          navigate('/login');
+          navigate("/login");
         }
       } catch (error) {
-        console.error('Error checking authentication:', error.message);
-        setError('Error fetching tasks. Please try again.');
+        console.error("Error checking authentication:", error.message);
+        setError("Error fetching tasks. Please try again.");
       }
     };
 
@@ -267,11 +273,11 @@ const Dashboard = () => {
             <button
               type="submit"
               className={`${
-                editMode ? 'bg-yellow-500' : 'bg-blue-500'
+                editMode ? "bg-yellow-500" : "bg-blue-500"
               } text-white rounded-md py-2 px-4 transition duration-300 hover:bg-opacity-80`}
               disabled={loading}
             >
-              {loading ? 'Saving...' : editMode ? <FaSave /> : 'Create Task'}
+              {loading ? "Saving..." : editMode ? <FaSave /> : "Create Task"}
             </button>
             {editMode && (
               <button
@@ -293,14 +299,19 @@ const Dashboard = () => {
 
         <ul className="list-disc pl-6 mb-6">
           {(activeFilter ? filteredTasks : tasks).map((task) => (
-            <li key={task._id} className="mb-4 border-b border-gray-300 pb-2">
-              <div className="flex items-center justify-between">
-                <div>
+            <li
+              key={task._id}
+              className="mb-4 border-b border-gray-300 pb-2 hover:border-blue-500 transition duration-300"
+            >
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
+                <div className="mb-2 lg:mb-0 lg:mr-4">
                   <h3 className="text-lg font-semibold text-gray-800">
                     {task.title}
                   </h3>
                   <p className="text-sm text-gray-600">{task.description}</p>
-                  <p className="text-sm text-gray-600">Priority: {task.priority}</p>
+                  <p className="text-sm text-gray-600">
+                    Priority: {task.priority}
+                  </p>
                 </div>
                 <div className="flex items-center space-x-4">
                   <button
