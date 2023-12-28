@@ -33,19 +33,25 @@ const Dashboard = () => {
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("https://weekchallengemernbackend.vercel.app/tasks", {
-        
+      const response = await fetch("https://weekchallengemernbackend.vercel.app/tasks", {
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
       });
-
-      setTasks(response.data);
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      setTasks(data);
     } catch (error) {
       setError("Error fetching tasks. Please try again.");
       console.error(error.message);
     }
   };
+  
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
