@@ -25,14 +25,17 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://weekchallengemernbackend.vercel.app/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://weekchallengemernbackend.vercel.app/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+          
+        }
+      );
 
       if (response.ok) {
         // Store token in local storage
@@ -52,7 +55,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -116,8 +118,6 @@ const Login = () => {
             SignUp
           </button>
         </div>
-
-      
       </div>
     </div>
   );

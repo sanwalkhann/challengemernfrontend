@@ -34,7 +34,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get("https://weekchallengemernbackend.vercel.app/tasks", {
-        withCredentials: true,
+        
         headers: {
           Authorization: `Bearer ${token}`,
         },
