@@ -26,19 +26,18 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "https://weekchallengemernbackend.vercel.app/auth/login",
+        "https://weekfivehackathonbd.vercel.app/auth/login",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
-          
         }
       );
 
       if (response.ok) {
-        // Store token in local storage
+        
         const { token } = await response.json();
         localStorage.setItem("token", token);
 

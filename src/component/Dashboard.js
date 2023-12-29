@@ -33,7 +33,7 @@ const Dashboard = () => {
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("https://weekchallengemernbackend.vercel.app/tasks", {
+      const response = await fetch("https://weekfivehackathonbd.vercel.app/tasks", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -62,7 +62,7 @@ const Dashboard = () => {
 
       if (editMode && editTaskId) {
         const response = await axios.put(
-          `https://weekchallengemernbackend.vercel.app/tasks/${editTaskId}`,
+          `https://weekfivehackathonbd.vercel.app/tasks/${editTaskId}`,
           {
             title: taskTitle,
             description: taskDescription,
@@ -89,7 +89,7 @@ const Dashboard = () => {
         }
       } else {
         const response = await axios.post(
-          "https://weekchallengemernbackend.vercel.app/tasks",
+          "https://weekfivehackathonbd.vercel.app/tasks",
           {
             title: taskTitle,
             description: taskDescription,
@@ -156,7 +156,7 @@ const Dashboard = () => {
   const handleDeleteTask = async (taskId) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(`https://weekchallengemernbackend.vercel.app/tasks/${taskId}`, {
+      const response = await axios.delete(`https://weekfivehackathonbd.vercel.app/tasks/${taskId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

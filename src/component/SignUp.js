@@ -22,7 +22,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("https://weekchallengemernbackend.vercel.app/auth/signup", {
+      const response = await fetch("https://weekfivehackathonbd.vercel.app/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
